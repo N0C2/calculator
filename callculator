@@ -1,0 +1,97 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+
+const itemData = {
+  "1k ME Storage": [
+    { material: "Redstone", amount: 4 },
+    { material: "Certus Quartz", amount: 4 },
+    { material: "Logic Processor", amount: 1 },
+  ],
+  "4k ME Storage": [
+    { material: "Redstone", amount: 8 },
+    { material: "Certus Quartz", amount: 8 },
+    { material: "Calculation Processor", amount: 1 },
+  ],
+  "16k ME Storage": [
+    { material: "Redstone", amount: 16 },
+    { material: "Certus Quartz", amount: 16 },
+    { material: "Calculation Processor", amount: 4 },
+  ],
+  "64k ME Storage": [
+    { material: "Redstone", amount: 32 },
+    { material: "Certus Quartz", amount: 32 },
+    { material: "Engineering Processor", amount: 1 },
+  ],
+  "ME Controller": [
+    { material: "Pure Fluix Crystal", amount: 4 },
+    { material: "Sky Stone Block", amount: 4 },
+    { material: "Engineering Processor", amount: 1 },
+  ],
+  "ME Drive": [
+    { material: "Engineering Processor", amount: 2 },
+    { material: "Glass", amount: 2 },
+    { material: "Iron Ingots", amount: 4 },
+  ],
+  "ME Terminal": [
+    { material: "Illuminated Panel", amount: 1 },
+    { material: "Logic Processor", amount: 1 },
+    { material: "Formation Core", amount: 1 },
+    { material: "Annihilation Core", amount: 1 },
+  ],
+};
+
+export default function ItemCalculator() {
+  const [selectedItem, setSelectedItem] = useState("1k ME Storage");
+  const [quantity, setQuantity] = useState(1);
+
+  const materials = itemData[selectedItem] || [];
+
+  return (
+    <div className="flex flex-col items-center p-6 space-y-6">
+      <h1 className="text-2xl font-bold">Item Kalkulator - Applied Energistics 2</h1>
+      <Card className="w-full max-w-md p-4">
+        <CardContent className="space-y-4">
+          <Select onValueChange={setSelectedItem} defaultValue={selectedItem}>
+            <SelectTrigger>
+              <SelectValue placeholder="Wähle ein Item" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.keys(itemData).map((item) => (
+                <SelectItem key={item} value={item}>{item}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Input
+            type="number"
+            value={quantity}
+            onChange={(e) => setQuantity(Number(e.target.value))}
+            placeholder="Anzahl"
+          />
+        </CardContent>
+      </Card>
+
+      <Table className="w-full max-w-md">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Material</TableHead>
+            <TableHead>Menge pro Einheit</TableHead>
+            <TableHead>Gesamtmenge</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {materials.map(({ material, amount }) => (
+            <TableRow key={material}>
+              <TableCell>{material}</TableCell>
+              <TableCell>{amount}</TableCell>
+              <TableCell>{amount * quantity}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
